@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "celebracoes_horario_inicio_uniq" ON "celebracoes" USING btree ("horario_id","inicio");

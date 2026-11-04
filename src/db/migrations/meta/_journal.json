@@ -1,0 +1,76 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793026885928,
+      "tag": "0000_minor_sprite",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793027728684,
+      "tag": "0001_peaceful_stature",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793030021385,
+      "tag": "0002_luxuriant_princess_powerful",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793035623986,
+      "tag": "0003_kind_millenium_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793042779711,
+      "tag": "0004_lame_the_initiative",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793044536337,
+      "tag": "0005_neat_rafael_vega",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793044589062,
+      "tag": "0006_common_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793045794874,
+      "tag": "0007_furry_vulcan",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793047768870,
+      "tag": "0008_rich_psynapse",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793737438659,
+      "tag": "0009_secretaria",
+      "breakpoints": true
+    }
+  ]
+}

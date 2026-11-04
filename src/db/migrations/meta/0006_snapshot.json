@@ -1,0 +1,3154 @@
+{
+  "id": "030ef15a-c3af-464d-ae5c-6455ffbef7a6",
+  "prevId": "5f96d509-b642-414e-a1e3-3818e50e2f6f",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.agendas": {
+      "name": "agendas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visibilidade": {
+          "name": "visibilidade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'publica'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "agendas_paroquia_id_paroquias_id_fk": {
+          "name": "agendas_paroquia_id_paroquias_id_fk",
+          "tableFrom": "agendas",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.celebracoes": {
+      "name": "celebracoes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "horario_id": {
+          "name": "horario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comunidade_id": {
+          "name": "comunidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'missa'"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'agendada'"
+        },
+        "celebrante": {
+          "name": "celebrante",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "limite_intencoes": {
+          "name": "limite_intencoes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "celebracoes_paroquia_inicio_idx": {
+          "name": "celebracoes_paroquia_inicio_idx",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "inicio",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "celebracoes_horario_inicio_uniq": {
+          "name": "celebracoes_horario_inicio_uniq",
+          "columns": [
+            {
+              "expression": "horario_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "inicio",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "celebracoes_paroquia_id_paroquias_id_fk": {
+          "name": "celebracoes_paroquia_id_paroquias_id_fk",
+          "tableFrom": "celebracoes",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "celebracoes_horario_id_horarios_recorrentes_id_fk": {
+          "name": "celebracoes_horario_id_horarios_recorrentes_id_fk",
+          "tableFrom": "celebracoes",
+          "tableTo": "horarios_recorrentes",
+          "columnsFrom": [
+            "horario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "celebracoes_comunidade_id_comunidades_id_fk": {
+          "name": "celebracoes_comunidade_id_comunidades_id_fk",
+          "tableFrom": "celebracoes",
+          "tableTo": "comunidades",
+          "columnsFrom": [
+            "comunidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.comunidades": {
+      "name": "comunidades",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "responsavel_pessoa_id": {
+          "name": "responsavel_pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "comunidades_paroquia_id_paroquias_id_fk": {
+          "name": "comunidades_paroquia_id_paroquias_id_fk",
+          "tableFrom": "comunidades",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.eventos": {
+      "name": "eventos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "agenda_id": {
+          "name": "agenda_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "local": {
+          "name": "local",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fim": {
+          "name": "fim",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rrule": {
+          "name": "rrule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "celebracao_id": {
+          "name": "celebracao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "eventos_paroquia_id_paroquias_id_fk": {
+          "name": "eventos_paroquia_id_paroquias_id_fk",
+          "tableFrom": "eventos",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "eventos_agenda_id_agendas_id_fk": {
+          "name": "eventos_agenda_id_agendas_id_fk",
+          "tableFrom": "eventos",
+          "tableTo": "agendas",
+          "columnsFrom": [
+            "agenda_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "eventos_celebracao_id_celebracoes_id_fk": {
+          "name": "eventos_celebracao_id_celebracoes_id_fk",
+          "tableFrom": "eventos",
+          "tableTo": "celebracoes",
+          "columnsFrom": [
+            "celebracao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.familias": {
+      "name": "familias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "familias_paroquia_id_paroquias_id_fk": {
+          "name": "familias_paroquia_id_paroquias_id_fk",
+          "tableFrom": "familias",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.horarios_recorrentes": {
+      "name": "horarios_recorrentes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comunidade_id": {
+          "name": "comunidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rrule": {
+          "name": "rrule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'missa'"
+        },
+        "duracao_min": {
+          "name": "duracao_min",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 60
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "horarios_recorrentes_paroquia_id_paroquias_id_fk": {
+          "name": "horarios_recorrentes_paroquia_id_paroquias_id_fk",
+          "tableFrom": "horarios_recorrentes",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "horarios_recorrentes_comunidade_id_comunidades_id_fk": {
+          "name": "horarios_recorrentes_comunidade_id_comunidades_id_fk",
+          "tableFrom": "horarios_recorrentes",
+          "tableTo": "comunidades",
+          "columnsFrom": [
+            "comunidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.intencoes": {
+      "name": "intencoes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "celebracao_id": {
+          "name": "celebracao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "texto": {
+          "name": "texto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "solicitante_nome": {
+          "name": "solicitante_nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "solicitante_contato": {
+          "name": "solicitante_contato",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "intencoes_paroquia_id_paroquias_id_fk": {
+          "name": "intencoes_paroquia_id_paroquias_id_fk",
+          "tableFrom": "intencoes",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "intencoes_celebracao_id_celebracoes_id_fk": {
+          "name": "intencoes_celebracao_id_celebracoes_id_fk",
+          "tableFrom": "intencoes",
+          "tableTo": "celebracoes",
+          "columnsFrom": [
+            "celebracao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.membros_paroquia": {
+      "name": "membros_paroquia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usuario_id": {
+          "name": "usuario_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "papel": {
+          "name": "papel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "membros_paroquia_uniq": {
+          "name": "membros_paroquia_uniq",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "usuario_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "membros_paroquia_paroquia_id_paroquias_id_fk": {
+          "name": "membros_paroquia_paroquia_id_paroquias_id_fk",
+          "tableFrom": "membros_paroquia",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "membros_paroquia_pessoa_id_pessoas_id_fk": {
+          "name": "membros_paroquia_pessoa_id_pessoas_id_fk",
+          "tableFrom": "membros_paroquia",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.paroquias": {
+      "name": "paroquias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cnpj": {
+          "name": "cnpj",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jurisdicao_tipo": {
+          "name": "jurisdicao_tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jurisdicao_nome": {
+          "name": "jurisdicao_nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fuso": {
+          "name": "fuso",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'America/Manaus'"
+        },
+        "config": {
+          "name": "config",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "paroquias_slug_unique": {
+          "name": "paroquias_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pastorais": {
+      "name": "pastorais",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pastorais_paroquia_id_paroquias_id_fk": {
+          "name": "pastorais_paroquia_id_paroquias_id_fk",
+          "tableFrom": "pastorais",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pastoral_membros": {
+      "name": "pastoral_membros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pastoral_id": {
+          "name": "pastoral_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "coordenador": {
+          "name": "coordenador",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pastoral_membros_paroquia_id_paroquias_id_fk": {
+          "name": "pastoral_membros_paroquia_id_paroquias_id_fk",
+          "tableFrom": "pastoral_membros",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pastoral_membros_pastoral_id_pastorais_id_fk": {
+          "name": "pastoral_membros_pastoral_id_pastorais_id_fk",
+          "tableFrom": "pastoral_membros",
+          "tableTo": "pastorais",
+          "columnsFrom": [
+            "pastoral_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pastoral_membros_pessoa_id_pessoas_id_fk": {
+          "name": "pastoral_membros_pessoa_id_pessoas_id_fk",
+          "tableFrom": "pastoral_membros",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pessoas": {
+      "name": "pessoas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome_busca": {
+          "name": "nome_busca",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nascimento": {
+          "name": "nascimento",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sexo": {
+          "name": "sexo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefone": {
+          "name": "telefone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "comunidade_id": {
+          "name": "comunidade_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "familia_id": {
+          "name": "familia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "pessoas_paroquia_nome_idx": {
+          "name": "pessoas_paroquia_nome_idx",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "nome_busca",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pessoas_paroquia_id_paroquias_id_fk": {
+          "name": "pessoas_paroquia_id_paroquias_id_fk",
+          "tableFrom": "pessoas",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pessoas_comunidade_id_comunidades_id_fk": {
+          "name": "pessoas_comunidade_id_comunidades_id_fk",
+          "tableFrom": "pessoas",
+          "tableTo": "comunidades",
+          "columnsFrom": [
+            "comunidade_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pessoas_familia_id_familias_id_fk": {
+          "name": "pessoas_familia_id_familias_id_fk",
+          "tableFrom": "pessoas",
+          "tableTo": "familias",
+          "columnsFrom": [
+            "familia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.account": {
+      "name": "account",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "account_userId_idx": {
+          "name": "account_userId_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.session": {
+      "name": "session",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "session_userId_idx": {
+          "name": "session_userId_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "session_token_unique": {
+          "name": "session_token_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_verified": {
+          "name": "email_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.verification": {
+      "name": "verification",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "verification_identifier_idx": {
+          "name": "verification_identifier_idx",
+          "columns": [
+            {
+              "expression": "identifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.escala_itens": {
+      "name": "escala_itens",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "escala_id": {
+          "name": "escala_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "celebracao_id": {
+          "name": "celebracao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funcao_id": {
+          "name": "funcao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "confirmado": {
+          "name": "confirmado",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "escala_itens_paroquia_id_paroquias_id_fk": {
+          "name": "escala_itens_paroquia_id_paroquias_id_fk",
+          "tableFrom": "escala_itens",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "escala_itens_escala_id_escalas_id_fk": {
+          "name": "escala_itens_escala_id_escalas_id_fk",
+          "tableFrom": "escala_itens",
+          "tableTo": "escalas",
+          "columnsFrom": [
+            "escala_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "escala_itens_celebracao_id_celebracoes_id_fk": {
+          "name": "escala_itens_celebracao_id_celebracoes_id_fk",
+          "tableFrom": "escala_itens",
+          "tableTo": "celebracoes",
+          "columnsFrom": [
+            "celebracao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "escala_itens_funcao_id_funcoes_escala_id_fk": {
+          "name": "escala_itens_funcao_id_funcoes_escala_id_fk",
+          "tableFrom": "escala_itens",
+          "tableTo": "funcoes_escala",
+          "columnsFrom": [
+            "funcao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "escala_itens_pessoa_id_pessoas_id_fk": {
+          "name": "escala_itens_pessoa_id_pessoas_id_fk",
+          "tableFrom": "escala_itens",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.escalas": {
+      "name": "escalas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "mes": {
+          "name": "mes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'rascunho'"
+        }
+      },
+      "indexes": {
+        "escalas_paroquia_mes_uniq": {
+          "name": "escalas_paroquia_mes_uniq",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "mes",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "escalas_paroquia_id_paroquias_id_fk": {
+          "name": "escalas_paroquia_id_paroquias_id_fk",
+          "tableFrom": "escalas",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.funcao_membros": {
+      "name": "funcao_membros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funcao_id": {
+          "name": "funcao_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "funcao_membros_uniq": {
+          "name": "funcao_membros_uniq",
+          "columns": [
+            {
+              "expression": "funcao_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "pessoa_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "funcao_membros_paroquia_id_paroquias_id_fk": {
+          "name": "funcao_membros_paroquia_id_paroquias_id_fk",
+          "tableFrom": "funcao_membros",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "funcao_membros_funcao_id_funcoes_escala_id_fk": {
+          "name": "funcao_membros_funcao_id_funcoes_escala_id_fk",
+          "tableFrom": "funcao_membros",
+          "tableTo": "funcoes_escala",
+          "columnsFrom": [
+            "funcao_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "funcao_membros_pessoa_id_pessoas_id_fk": {
+          "name": "funcao_membros_pessoa_id_pessoas_id_fk",
+          "tableFrom": "funcao_membros",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.funcoes_escala": {
+      "name": "funcoes_escala",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vagas": {
+          "name": "vagas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "funcoes_escala_paroquia_id_paroquias_id_fk": {
+          "name": "funcoes_escala_paroquia_id_paroquias_id_fk",
+          "tableFrom": "funcoes_escala",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.convites": {
+      "name": "convites",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expira_em": {
+          "name": "expira_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usado_em": {
+          "name": "usado_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "convites_paroquia_id_paroquias_id_fk": {
+          "name": "convites_paroquia_id_paroquias_id_fk",
+          "tableFrom": "convites",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "convites_pessoa_id_pessoas_id_fk": {
+          "name": "convites_pessoa_id_pessoas_id_fk",
+          "tableFrom": "convites",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "convites_token_hash_unique": {
+          "name": "convites_token_hash_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token_hash"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.formularios": {
+      "name": "formularios",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "campos": {
+          "name": "campos",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "abre_em": {
+          "name": "abre_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_em": {
+          "name": "fecha_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "limite": {
+          "name": "limite",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ativo": {
+          "name": "ativo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "modelo_origem": {
+          "name": "modelo_origem",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "formularios_paroquia_id_paroquias_id_fk": {
+          "name": "formularios_paroquia_id_paroquias_id_fk",
+          "tableFrom": "formularios",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pedidos_pastorais": {
+      "name": "pedidos_pastorais",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "urgente": {
+          "name": "urgente",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "solicitante_nome": {
+          "name": "solicitante_nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contato": {
+          "name": "contato",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "atribuido_a": {
+          "name": "atribuido_a",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'novo'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "pedidos_pastorais_paroquia_id_paroquias_id_fk": {
+          "name": "pedidos_pastorais_paroquia_id_paroquias_id_fk",
+          "tableFrom": "pedidos_pastorais",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.respostas": {
+      "name": "respostas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "formulario_id": {
+          "name": "formulario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dados": {
+          "name": "dados",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'nova'"
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "respostas_formulario_idx": {
+          "name": "respostas_formulario_idx",
+          "columns": [
+            {
+              "expression": "formulario_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "respostas_paroquia_id_paroquias_id_fk": {
+          "name": "respostas_paroquia_id_paroquias_id_fk",
+          "tableFrom": "respostas",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "respostas_formulario_id_formularios_id_fk": {
+          "name": "respostas_formulario_id_formularios_id_fk",
+          "tableFrom": "respostas",
+          "tableTo": "formularios",
+          "columnsFrom": [
+            "formulario_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "respostas_pessoa_id_pessoas_id_fk": {
+          "name": "respostas_pessoa_id_pessoas_id_fk",
+          "tableFrom": "respostas",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.assento_pessoas": {
+      "name": "assento_pessoas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assento_id": {
+          "name": "assento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "papel": {
+          "name": "papel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pessoa_id": {
+          "name": "pessoa_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "assento_pessoas_paroquia_id_paroquias_id_fk": {
+          "name": "assento_pessoas_paroquia_id_paroquias_id_fk",
+          "tableFrom": "assento_pessoas",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "assento_pessoas_assento_id_assentos_id_fk": {
+          "name": "assento_pessoas_assento_id_assentos_id_fk",
+          "tableFrom": "assento_pessoas",
+          "tableTo": "assentos",
+          "columnsFrom": [
+            "assento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "assento_pessoas_pessoa_id_pessoas_id_fk": {
+          "name": "assento_pessoas_pessoa_id_pessoas_id_fk",
+          "tableFrom": "assento_pessoas",
+          "tableTo": "pessoas",
+          "columnsFrom": [
+            "pessoa_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.assentos": {
+      "name": "assentos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "livro_id": {
+          "name": "livro_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "folha": {
+          "name": "folha",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "termo": {
+          "name": "termo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "celebrante": {
+          "name": "celebrante",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "observacoes": {
+          "name": "observacoes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "texto_busca": {
+          "name": "texto_busca",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        }
+      },
+      "indexes": {
+        "assentos_livro_folha_termo_uniq": {
+          "name": "assentos_livro_folha_termo_uniq",
+          "columns": [
+            {
+              "expression": "livro_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "folha",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "termo",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "assentos_paroquia_data_idx": {
+          "name": "assentos_paroquia_data_idx",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "data",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "assentos_paroquia_id_paroquias_id_fk": {
+          "name": "assentos_paroquia_id_paroquias_id_fk",
+          "tableFrom": "assentos",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "assentos_livro_id_livros_id_fk": {
+          "name": "assentos_livro_id_livros_id_fk",
+          "tableFrom": "assentos",
+          "tableTo": "livros",
+          "columnsFrom": [
+            "livro_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.averbacoes": {
+      "name": "averbacoes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assento_id": {
+          "name": "assento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "texto": {
+          "name": "texto",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "averbacoes_paroquia_id_paroquias_id_fk": {
+          "name": "averbacoes_paroquia_id_paroquias_id_fk",
+          "tableFrom": "averbacoes",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "averbacoes_assento_id_assentos_id_fk": {
+          "name": "averbacoes_assento_id_assentos_id_fk",
+          "tableFrom": "averbacoes",
+          "tableTo": "assentos",
+          "columnsFrom": [
+            "assento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.certidoes": {
+      "name": "certidoes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assento_id": {
+          "name": "assento_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "codigo": {
+          "name": "codigo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emitida_em": {
+          "name": "emitida_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "emitida_por": {
+          "name": "emitida_por",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finalidade": {
+          "name": "finalidade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revogada_em": {
+          "name": "revogada_em",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "motivo_revogacao": {
+          "name": "motivo_revogacao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tipo_registro": {
+          "name": "tipo_registro",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nome_registrado": {
+          "name": "nome_registrado",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "paragrafos": {
+          "name": "paragrafos",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hash_conteudo": {
+          "name": "hash_conteudo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "certidoes_codigo_uniq": {
+          "name": "certidoes_codigo_uniq",
+          "columns": [
+            {
+              "expression": "codigo",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "certidoes_paroquia_id_paroquias_id_fk": {
+          "name": "certidoes_paroquia_id_paroquias_id_fk",
+          "tableFrom": "certidoes",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "certidoes_assento_id_assentos_id_fk": {
+          "name": "certidoes_assento_id_assentos_id_fk",
+          "tableFrom": "certidoes",
+          "tableTo": "assentos",
+          "columnsFrom": [
+            "assento_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.livros": {
+      "name": "livros",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paroquia_id": {
+          "name": "paroquia_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo": {
+          "name": "tipo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "inicio": {
+          "name": "inicio",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fim": {
+          "name": "fim",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "livros_paroquia_tipo_numero_uniq": {
+          "name": "livros_paroquia_tipo_numero_uniq",
+          "columns": [
+            {
+              "expression": "paroquia_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "tipo",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "numero",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "livros_paroquia_id_paroquias_id_fk": {
+          "name": "livros_paroquia_id_paroquias_id_fk",
+          "tableFrom": "livros",
+          "tableTo": "paroquias",
+          "columnsFrom": [
+            "paroquia_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
