@@ -100,7 +100,7 @@ async function Livros() {
 
 export default function Page({ searchParams }: PageProps<"/painel/registros">) {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Livros e certidões</h1>
       <p className="mb-4 text-sm text-muted-foreground">
         O sistema é um índice digital: o livro físico continua sendo o documento oficial.

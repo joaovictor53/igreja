@@ -59,7 +59,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Inscrições</h1>
       <p className="text-sm text-muted-foreground">Crie um formulário a partir de um modelo e divulgue o link ou o QR Code.</p>
       <Suspense fallback={<p>Carregando…</p>}>

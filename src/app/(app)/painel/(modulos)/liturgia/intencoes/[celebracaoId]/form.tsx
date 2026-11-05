@@ -28,7 +28,7 @@ export function IntencaoForm({ celebracaoId }: { celebracaoId: string }) {
         Intenção
         <Input name="texto" required />
       </Label>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Label className="flex-col items-stretch">
           Solicitante
           <Input name="solicitanteNome" />

@@ -26,7 +26,7 @@ async function Conteudo() {
 
   return (
     <>
-      <form action={criarHorario} className="my-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <form action={criarHorario} className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-5">
         <Label className="flex-col items-stretch">
           Comunidade
           <NativeSelect name="comunidadeId" required className="w-full">
@@ -75,7 +75,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Horários semanais</h1>
       <p className="text-sm text-muted-foreground">Ao adicionar, as celebrações dos próximos 3 meses são geradas.</p>
       <Suspense fallback={<p>Carregando…</p>}>

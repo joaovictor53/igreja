@@ -23,7 +23,7 @@ export function AssentoForm({ livroId, tipo }: { livroId: string; tipo: TipoRegi
   return (
     <form action={action} className="flex flex-col gap-4">
       <input type="hidden" name="livroId" value={livroId} />
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Label className="flex-col items-stretch">
           Folha
           <Input name="folha" required maxLength={20} />

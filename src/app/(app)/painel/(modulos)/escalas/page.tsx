@@ -59,7 +59,7 @@ async function Conteudo({ searchParams }: { searchParams: Promise<{ mes?: string
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end gap-3">
-            <form method="get" className="flex items-end gap-2">
+            <form method="get" className="flex flex-wrap items-end gap-2">
               <Input name="mes" type="month" defaultValue={mes} aria-label="Mês" />
               <Button type="submit" variant="outline">Ver</Button>
             </form>
@@ -109,7 +109,7 @@ async function Conteudo({ searchParams }: { searchParams: Promise<{ mes?: string
 
 export default function Page({ searchParams }: PageProps<"/painel/escalas">) {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="mb-4 text-2xl font-semibold">Escala do mês</h1>
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo searchParams={searchParams} />

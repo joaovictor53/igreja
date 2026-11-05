@@ -69,7 +69,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Funções da escala</h1>
       <p className="text-sm text-muted-foreground">
         Pessoas são cadastradas no módulo Pessoas. Aqui você define as funções e quem pode exercê-las.

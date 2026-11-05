@@ -48,7 +48,7 @@ async function Shell({ children }: { children: React.ReactNode }) {
 
 export default function Layout({ children }: LayoutProps<"/painel">) {
   return (
-    <Suspense fallback={<p className="p-6">Carregando…</p>}>
+    <Suspense fallback={<p className="p-4 sm:p-6">Carregando…</p>}>
       <Shell>{children}</Shell>
     </Suspense>
   );

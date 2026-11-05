@@ -52,7 +52,7 @@ export function LinhaComunidade({ id, nome, endereco }: { id: string; nome: stri
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <strong>{nome}</strong>
           {endereco && <p className="text-sm text-muted-foreground">{endereco}</p>}

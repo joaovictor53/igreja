@@ -33,7 +33,7 @@ async function Conteudo() {
 
   return (
     <>
-      <form action={abrirData} className="my-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <form action={abrirData} className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-5">
         <Label className="flex-col items-stretch">
           Tipo
           <NativeSelect name="tipo" className="w-full">
@@ -70,7 +70,7 @@ async function Conteudo() {
           return (
             <Card key={dt.id}>
               <CardContent className="flex flex-col gap-3">
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <strong>{TIPO[dt.tipo]}</strong> — {formatarDataHora(dt.inicio, paroquia.fuso)}
                     {dt.comunidadeId && ` — ${nomeComunidade.get(dt.comunidadeId)}`}
@@ -154,7 +154,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Batizados e casamentos</h1>
       <p className="text-sm text-muted-foreground">
         Abra as datas disponíveis, agende e acompanhe os documentos e o curso de preparação.

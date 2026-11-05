@@ -26,7 +26,7 @@ async function Conteudo() {
         Página pública: <a className="underline" href={`/${paroquia.slug}`}>/{paroquia.slug}</a> · Feed:{" "}
         <a className="underline" href={`/api/ics/${paroquia.slug}`}>/api/ics/{paroquia.slug}</a>
       </p>
-      <form action={criarEvento} className="my-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <form action={criarEvento} className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-5">
         <Label className="col-span-2 flex-col items-stretch">
           Título
           <Input name="titulo" required />
@@ -71,7 +71,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Agenda pública</h1>
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo />

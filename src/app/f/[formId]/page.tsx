@@ -48,7 +48,7 @@ async function Conteudo({ params }: { params: Promise<{ formId: string }> }) {
 
 export default function Page({ params }: PageProps<"/f/[formId]">) {
   return (
-    <main className="mx-auto w-full max-w-lg p-6">
+    <main className="mx-auto w-full max-w-lg p-4 sm:p-6">
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo params={params} />
       </Suspense>

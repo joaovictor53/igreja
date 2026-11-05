@@ -9,7 +9,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-md p-6">
+    <main className="mx-auto w-full max-w-md p-4 sm:p-6">
       <h1 className="mb-4 text-2xl font-semibold">Meu perfil</h1>
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo />

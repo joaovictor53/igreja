@@ -32,7 +32,7 @@ async function Conteudo() {
         <Button type="submit" variant="outline">Adicionar espaço</Button>
       </form>
       {salas.length > 0 && (
-        <form action={criarReserva} className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <form action={criarReserva} className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
           <Label className="flex-col items-stretch">
             Espaço
             <NativeSelect name="espacoId" required className="w-full">
@@ -105,7 +105,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Reserva de espaços</h1>
       <p className="text-sm text-muted-foreground">Uma reserva só pode ser aprovada se o espaço estiver livre no horário.</p>
       <Suspense fallback={<p>Carregando…</p>}>

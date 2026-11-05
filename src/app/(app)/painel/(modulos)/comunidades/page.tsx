@@ -33,7 +33,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Comunidades</h1>
       <p className="text-sm text-muted-foreground">
         Matriz, capelas e áreas missionárias. Horários de missa, catequese e datas de batizados e casamentos são ligados a uma comunidade.

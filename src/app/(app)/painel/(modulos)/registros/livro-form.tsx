@@ -16,7 +16,7 @@ export function LivroForm() {
     return res;
   }, {});
   return (
-    <form ref={ref} action={action} className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+    <form ref={ref} action={action} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-5">
       <Label className="flex-col items-stretch">
         Tipo
         <NativeSelect name="tipo" className="w-full">

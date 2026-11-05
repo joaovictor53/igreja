@@ -40,7 +40,7 @@ async function Conteudo({ params }: { params: Promise<{ token: string }> }) {
 
 export default function Page({ params }: PageProps<"/convite/[token]">) {
   return (
-    <main className="mx-auto w-full max-w-md p-6">
+    <main className="mx-auto w-full max-w-md p-4 sm:p-6">
       <Card>
         <Suspense fallback={<CardContent>Carregando…</CardContent>}>
           <Conteudo params={params} />

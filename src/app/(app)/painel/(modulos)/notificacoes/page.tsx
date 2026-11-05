@@ -51,7 +51,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Notificações</h1>
       <p className="text-sm text-muted-foreground">
         Use &ldquo;Ativar avisos neste aparelho&rdquo; no topo para receber também no celular, mesmo com o sistema fechado.

@@ -12,7 +12,7 @@ export function CampoForm({ formularioId }: { formularioId: string }) {
   const [state, action, pending] = useActionState(adicionarCampo, {});
 
   return (
-    <form action={action} className="grid grid-cols-2 gap-3 border-t pt-4">
+    <form action={action} className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t pt-4">
       <input type="hidden" name="formularioId" value={formularioId} />
       <Label className="flex-col items-stretch">
         Rótulo

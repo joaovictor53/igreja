@@ -66,7 +66,7 @@ async function Conteudo({ params }: { params: Promise<{ formId: string }> }) {
         </CardHeader>
         <CardContent className="flex flex-wrap items-start gap-6">
           <div role="img" aria-label={`QR Code para ${url}`} dangerouslySetInnerHTML={{ __html: qr }} />
-          <form action={atualizarConfig} className="grid flex-1 grid-cols-2 gap-3">
+          <form action={atualizarConfig} className="grid flex-1 grid-cols-1 sm:grid-cols-2 gap-3">
             <input type="hidden" name="formularioId" value={f.id} />
             <Label className="flex-col items-stretch">
               Abre em
@@ -95,7 +95,7 @@ async function Conteudo({ params }: { params: Promise<{ formId: string }> }) {
         <CardContent className="flex flex-col gap-4">
           <ul className="flex flex-col gap-2">
             {f.campos.map((c) => (
-              <li key={c.id} className="flex items-center justify-between gap-2">
+              <li key={c.id} className="flex flex-wrap items-center justify-between gap-2">
                 <span className="flex items-center gap-2">
                   {c.rotulo}
                   <Badge variant="secondary">{TIPOS_CAMPO[c.tipo]}</Badge>
@@ -160,7 +160,7 @@ async function Conteudo({ params }: { params: Promise<{ formId: string }> }) {
 
 export default function Page({ params }: PageProps<"/painel/inscricoes/[formId]">) {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo params={params} />
       </Suspense>

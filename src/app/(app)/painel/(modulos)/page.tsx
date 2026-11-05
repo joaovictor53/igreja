@@ -115,7 +115,7 @@ async function Resumo() {
   return (
     <div className="flex flex-col gap-4">
       {cabecalho}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
         {numeros.map(([rotulo, valor]) => (
           <Card key={rotulo}>
             <CardContent>
@@ -140,7 +140,7 @@ async function Resumo() {
             </Link>
           ))}
           {eventosHoje.map((e) => (
-            <div key={e.id} className="flex justify-between gap-3">
+            <div key={e.id} className="flex flex-wrap justify-between gap-3">
               <span>
                 {hora.format(e.inicio)} · {e.titulo}
               </span>
@@ -152,14 +152,14 @@ async function Resumo() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-1 sm:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Tarefas que pedem atenção</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             {tarefasUrgentes.map((t) => (
-              <div key={t.id} className="flex items-center justify-between gap-2">
+              <div key={t.id} className="flex flex-wrap items-center justify-between gap-2">
                 <span>{t.titulo}</span>
                 <Badge variant={tarefaAtrasada(t.prazo, false, hoje) ? "destructive" : "secondary"}>
                   {tarefaAtrasada(t.prazo, false, hoje) ? "Atrasada" : "Hoje"}
@@ -176,7 +176,7 @@ async function Resumo() {
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             {pedidos.slice(0, 5).map((p) => (
-              <div key={p.id} className="flex items-center justify-between gap-2">
+              <div key={p.id} className="flex flex-wrap items-center justify-between gap-2">
                 <span>{p.solicitanteNome}</span>
                 {p.urgente && <Badge variant="destructive">Urgente</Badge>}
               </div>
@@ -192,7 +192,7 @@ async function Resumo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-4xl p-6">
+    <main className="mx-auto w-full max-w-4xl p-4 sm:p-6">
       <Suspense fallback={<p>Carregando…</p>}>
         <Resumo />
       </Suspense>

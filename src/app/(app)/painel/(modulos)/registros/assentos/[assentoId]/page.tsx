@@ -144,7 +144,7 @@ async function Conteudo({ params }: { params: Promise<{ assentoId: string }> }) 
 
 export default function Page({ params }: PageProps<"/painel/registros/assentos/[assentoId]">) {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo params={params} />
       </Suspense>

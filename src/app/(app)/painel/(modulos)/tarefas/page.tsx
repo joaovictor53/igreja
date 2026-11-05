@@ -23,7 +23,7 @@ async function Conteudo() {
 
   return (
     <>
-      <form action={criarTarefa} className="my-4 grid grid-cols-2 gap-3">
+      <form action={criarTarefa} className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Label className="col-span-2 flex-col items-stretch">
           Tarefa
           <Input name="titulo" required />
@@ -51,7 +51,7 @@ async function Conteudo() {
           return (
             <Card key={t.id}>
               <CardContent className="flex flex-col gap-2">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <strong className={t.concluidaEm ? "line-through" : ""}>{t.titulo}</strong>
                     <p className="text-sm text-muted-foreground">
@@ -99,7 +99,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Tarefas da equipe</h1>
       <p className="text-sm text-muted-foreground">As tarefas atrasadas aparecem também no Início.</p>
       <Suspense fallback={<p>Carregando…</p>}>

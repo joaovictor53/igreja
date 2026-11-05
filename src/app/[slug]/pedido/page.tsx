@@ -38,7 +38,7 @@ async function Conteudo({ params }: { params: Promise<{ slug: string }> }) {
 
 export default function Page({ params }: PageProps<"/[slug]/pedido">) {
   return (
-    <main className="mx-auto w-full max-w-lg p-6">
+    <main className="mx-auto w-full max-w-lg p-4 sm:p-6">
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo params={params} />
       </Suspense>

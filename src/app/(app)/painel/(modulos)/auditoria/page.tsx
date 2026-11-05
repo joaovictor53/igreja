@@ -41,7 +41,7 @@ async function Conteudo({ searchParams }: { searchParams: Promise<{ t?: string; 
 
   return (
     <>
-      <form method="get" className="my-4 flex items-end gap-2">
+      <form method="get" className="my-4 flex flex-wrap items-end gap-2">
         <Label className="flex-col items-stretch">
           Registro
           <NativeSelect name="t" defaultValue={tabela ?? ""}>
@@ -66,7 +66,7 @@ async function Conteudo({ searchParams }: { searchParams: Promise<{ t?: string; 
               {(a.antes != null || a.depois != null) && (
                 <details className="text-sm">
                   <summary className="cursor-pointer text-muted-foreground">Detalhes</summary>
-                  <div className="mt-1 grid gap-2 sm:grid-cols-2">
+                  <div className="mt-1 grid gap-2 sm:grid-cols-1 sm:grid-cols-2">
                     {a.antes != null && (
                       <pre className="overflow-x-auto rounded-md bg-muted p-2 text-xs">Antes: {JSON.stringify(a.antes, null, 2)}</pre>
                     )}
@@ -96,7 +96,7 @@ async function Conteudo({ searchParams }: { searchParams: Promise<{ t?: string; 
 
 export default function Page({ searchParams }: PageProps<"/painel/auditoria">) {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Auditoria</h1>
       <p className="text-sm text-muted-foreground">
         Quem criou, emitiu, revogou, baixou ou exportou dados sensíveis. O histórico não pode ser alterado nem apagado.

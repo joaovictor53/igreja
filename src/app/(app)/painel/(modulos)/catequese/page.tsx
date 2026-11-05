@@ -37,7 +37,7 @@ async function Conteudo() {
 
   return (
     <>
-      <div className="my-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
         {indicadores.map(([rotulo, valor]) => (
           <Card key={rotulo}>
             <CardContent>
@@ -55,7 +55,7 @@ async function Conteudo() {
             <Button type="submit" variant="outline">Adicionar etapa</Button>
           </form>
           {etapas.length > 0 && (
-            <form action={criarTurma} className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <form action={criarTurma} className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:grid-cols-4">
               <Label className="flex-col items-stretch">
                 Etapa
                 <NativeSelect name="etapaId" required className="w-full">
@@ -102,7 +102,7 @@ async function Conteudo() {
           const ocupadas = ativas.filter((m) => m.turmaId === t.id).length;
           return (
             <Card key={t.id}>
-              <CardContent className="flex items-center justify-between gap-3">
+              <CardContent className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <Link href={`/painel/catequese/${t.id}`} className="font-semibold underline">
                     {t.nome}
@@ -128,7 +128,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Catequese</h1>
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo />

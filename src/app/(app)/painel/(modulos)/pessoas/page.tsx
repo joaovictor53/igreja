@@ -30,7 +30,7 @@ async function Conteudo() {
           {lista.map((p, i) => (
             <div key={p.id} className="flex flex-col gap-3">
               {i > 0 && <Separator />}
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <span>{p.nome}</span>
                 {vinculadas.has(p.id) ? <Badge variant="secondary">Conta vinculada</Badge> : <ConviteButton pessoaId={p.id} />}
               </div>
@@ -45,7 +45,7 @@ async function Conteudo() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
+    <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Pessoas</h1>
       <p className="mb-4 text-sm text-muted-foreground">
         O convite vale por 7 dias e só pode ser usado uma vez. Envie o link à pessoa.

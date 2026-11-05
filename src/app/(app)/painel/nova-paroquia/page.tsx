@@ -10,7 +10,7 @@ async function Guard() {
 
 export default function Page() {
   return (
-    <main className="mx-auto w-full max-w-md p-6">
+    <main className="mx-auto w-full max-w-md p-4 sm:p-6">
       <Card>
         <CardHeader>
           <CardTitle>Cadastrar paróquia</CardTitle>
