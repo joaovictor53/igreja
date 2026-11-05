@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { notificacoes, pushSubscriptions } from "@/db/schema";
 import { requireUser } from "@/server/auth/session";
+import { endpointPushPermitido } from "@/lib/push";
 
 export async function marcarTodasLidas() {
   const user = await requireUser();
@@ -17,7 +18,7 @@ export async function marcarTodasLidas() {
 }
 
 const inscricao = z.object({
-  endpoint: z.url().refine((u) => u.startsWith("https://"), "endpoint precisa ser https"),
+  endpoint: z.url().refine(endpointPushPermitido, "endpoint de push não reconhecido"),
   keys: z.object({ p256dh: z.string().min(10).max(200), auth: z.string().min(10).max(100) }),
 });
 

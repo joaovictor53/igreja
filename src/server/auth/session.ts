@@ -1,7 +1,7 @@
 import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { asc, eq, sql } from "drizzle-orm";
 import { auth } from "@/server/auth";
 import { db } from "@/db";
 import { membrosParoquia, paroquias } from "@/db/schema";
@@ -30,6 +30,8 @@ export async function requireParoquia(papeisPermitidos?: Papel[]) {
     .from(membrosParoquia)
     .innerJoin(paroquias, eq(paroquias.id, membrosParoquia.paroquiaId))
     .where(eq(membrosParoquia.usuarioId, user.id))
+    // Ordem estável para quem está em mais de uma paróquia: vínculos de gestão antes dos de "membro", depois o mais antigo.
+    .orderBy(sql`(${membrosParoquia.papel} = 'membro')`, asc(membrosParoquia.createdAt))
     .limit(1);
   if (!row) redirect("/painel/nova-paroquia");
   if (papeisPermitidos && !papeisPermitidos.includes(row.papel)) redirect("/painel");

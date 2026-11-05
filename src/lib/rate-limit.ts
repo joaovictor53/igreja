@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { ipDoCliente } from "./ip";
 
 const janelas = new Map<string, number[]>();
 
@@ -9,7 +10,8 @@ const janelas = new Map<string, number[]>();
  */
 export async function excedeuLimite(chave: string, max = 5, janelaMs = 60_000): Promise<boolean> {
   const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0].trim() || "local";
+  // PROXY_HOPS = quantos proxies confiáveis ficam na frente do app (Railway: 1). Valores à esquerda vêm do cliente.
+  const ip = ipDoCliente(h.get("x-forwarded-for"), Number(process.env.PROXY_HOPS) || 1);
   const id = `${chave}:${ip}`;
   const agora = Date.now();
   const recentes = (janelas.get(id) ?? []).filter((t) => agora - t < janelaMs);

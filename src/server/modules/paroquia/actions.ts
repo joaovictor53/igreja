@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
 import { agendas, comunidades, membrosParoquia, paroquias } from "@/db/schema";
@@ -17,7 +16,7 @@ const schema = z.object({
   comunidade: z.string().trim().min(2, "Informe a comunidade matriz"),
 });
 
-export type NovaParoquiaState = { erro?: string };
+export type NovaParoquiaState = { erro?: string; ok?: boolean };
 
 export async function criarParoquia(_: NovaParoquiaState, formData: FormData): Promise<NovaParoquiaState> {
   const user = await requireUser();
@@ -38,5 +37,5 @@ export async function criarParoquia(_: NovaParoquiaState, formData: FormData): P
     if ((code.code ?? code.cause?.code) === "23505") return { erro: "Este endereço (slug) já está em uso" };
     throw e;
   }
-  redirect("/painel");
+  return { ok: true };
 }

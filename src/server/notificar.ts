@@ -2,6 +2,7 @@ import "server-only";
 import webpush from "web-push";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
+import { endpointPushPermitido } from "@/lib/push";
 import { funcaoMembros, membrosParoquia, notificacoes, pushSubscriptions } from "@/db/schema";
 
 export type Aviso = { titulo: string; corpo: string; url?: string };
@@ -33,7 +34,9 @@ export async function notificar(paroquiaId: string, usuarioIds: string[], aviso:
   );
   if (!configurarVapid()) return;
 
-  const subs = await db.select().from(pushSubscriptions).where(inArray(pushSubscriptions.usuarioId, destinatarios));
+  const todas = await db.select().from(pushSubscriptions).where(inArray(pushSubscriptions.usuarioId, destinatarios));
+  // inscrições antigas podem ter sido gravadas antes da lista de serviços permitidos
+  const subs = todas.filter((s) => endpointPushPermitido(s.endpoint));
   const payload = JSON.stringify({ titulo: aviso.titulo, corpo: aviso.corpo, url });
   await Promise.allSettled(
     subs.map(async (s) => {
