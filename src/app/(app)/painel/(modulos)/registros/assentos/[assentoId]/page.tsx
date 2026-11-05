@@ -21,7 +21,7 @@ const br = (iso: string) => iso.split("-").reverse().join("/");
 async function Conteudo({ params }: { params: Promise<{ assentoId: string }> }) {
   const { assentoId } = await params;
   if (!z.uuid().safeParse(assentoId).success) notFound();
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("registros:gerir");
   const [row] = await db
     .select({ a: assentos, livro: livros })
     .from(assentos)

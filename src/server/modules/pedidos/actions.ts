@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { membrosParoquia, paroquias, pedidosPastorais } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 import { excedeuLimite } from "@/lib/rate-limit";
+import { papeisComPermissao } from "@/server/permissoes";
 
 export type PedidoState = { erro?: string; ok?: boolean };
 
@@ -34,10 +35,9 @@ export async function criarPedido(_: PedidoState, formData: FormData): Promise<P
   return { ok: true };
 }
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
 
 export async function atualizarPedido(formData: FormData) {
-  const { paroquia } = await requireParoquia([...PAPEIS]);
+  const { paroquia } = await requireParoquia("pedidos:gerir");
   const d = z
     .object({
       id: z.uuid(),
@@ -55,7 +55,7 @@ export async function atualizarPedido(formData: FormData) {
         and(
           eq(membrosParoquia.paroquiaId, paroquia.id),
           eq(membrosParoquia.usuarioId, d.atribuidoA),
-          inArray(membrosParoquia.papel, ["admin", "paroco"]),
+          inArray(membrosParoquia.papel, await papeisComPermissao(paroquia.id, "pedidos:receber")),
         ),
       );
     if (!m) throw new Error("Responsável inválido");

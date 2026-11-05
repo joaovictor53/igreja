@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("escalas:gerir");
   const [pessoasLista, funcoes, membros] = await Promise.all([
     db.select().from(pessoas).where(eq(pessoas.paroquiaId, paroquia.id)).orderBy(asc(pessoas.nome)),
     db.select().from(funcoesEscala).where(eq(funcoesEscala.paroquiaId, paroquia.id)).orderBy(asc(funcoesEscala.nome)),

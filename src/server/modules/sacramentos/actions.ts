@@ -10,7 +10,7 @@ import { exigirDaParoquia } from "@/server/tenant";
 import { zonedToUtc } from "@/lib/datas";
 import { checklistInicial } from "@/lib/secretaria";
 
-const guard = () => requireParoquia(["admin", "paroco", "secretaria"]);
+const guard = () => requireParoquia("sacramentos:gerir");
 const refresh = () => {
   revalidatePath("/painel/sacramentos");
   revalidatePath("/painel");

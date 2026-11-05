@@ -14,7 +14,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Separator } from "@/components/ui/separator";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("inscricoes:gerir");
   const lista = await db
     .select({ f: formularios, respostas: count(respostas.id) })
     .from(formularios)

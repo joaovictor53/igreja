@@ -3,8 +3,8 @@ import { requireParoquia } from "@/server/auth/session";
 import { PerfilForm } from "./form";
 
 async function Conteudo() {
-  const { user, papel } = await requireParoquia();
-  return <PerfilForm nome={user.name} email={user.email} papel={papel} />;
+  const { user, papelNome } = await requireParoquia();
+  return <PerfilForm nome={user.name} email={user.email} papel={papelNome} />;
 }
 
 export default function Page() {

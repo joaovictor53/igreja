@@ -11,8 +11,7 @@ import { excedeuLimite } from "@/lib/rate-limit";
 import { MODELOS, TIPOS_CAMPO, idDoCampo, validarResposta, type Campo, type TipoCampo } from "@/lib/formularios";
 import { zonedToUtc } from "@/lib/datas";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
-const guard = () => requireParoquia([...PAPEIS]);
+const guard = () => requireParoquia("inscricoes:gerir");
 const refresh = (id?: string) => {
   revalidatePath("/painel/inscricoes");
   if (id) revalidatePath(`/painel/inscricoes/${id}`);

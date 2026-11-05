@@ -1,18 +1,79 @@
-import { pgTable, uuid, text, integer, boolean, timestamp, date, jsonb, index } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, integer, boolean, timestamp, date, jsonb, index, primaryKey } from "drizzle-orm/pg-core";
+import { TAREFA_PRIORIDADES, TAREFA_STATUS, TIPOS_ATIVIDADE } from "@/lib/tarefas";
 import type { ItemChecklist } from "@/lib/secretaria";
 import { comunidades, pessoas, tenant } from "./base";
+
+export const tarefaCategorias = pgTable(
+  "tarefa_categorias",
+  {
+    ...tenant(),
+    nome: text("nome").notNull(),
+    ordem: integer("ordem").notNull().default(0),
+    cor: text("cor"),
+  },
+  (t) => [index("tarefa_categorias_paroquia_idx").on(t.paroquiaId, t.ordem)],
+);
 
 export const tarefas = pgTable(
   "tarefas",
   {
     ...tenant(),
     titulo: text("titulo").notNull(),
-    responsavelPessoaId: uuid("responsavel_pessoa_id").references(() => pessoas.id, { onDelete: "set null" }),
+    descricao: text("descricao"),
+    observacao: text("observacao"),
+    status: text("status", { enum: TAREFA_STATUS }).notNull().default("TODO"),
+    prioridade: text("prioridade", { enum: TAREFA_PRIORIDADES }).notNull().default("MEDIA"),
     prazo: date("prazo"),
-    checklist: jsonb("checklist").$type<ItemChecklist[]>().notNull().default([]),
+    categoriaId: uuid("categoria_id").references(() => tarefaCategorias.id, { onDelete: "set null" }),
     concluidaEm: timestamp("concluida_em", { withTimezone: true }),
   },
-  (t) => [index("tarefas_paroquia_prazo_idx").on(t.paroquiaId, t.prazo)],
+  (t) => [
+    index("tarefas_paroquia_prazo_idx").on(t.paroquiaId, t.prazo),
+    index("tarefas_paroquia_categoria_idx").on(t.paroquiaId, t.categoriaId),
+  ],
+);
+
+export const tarefaResponsaveis = pgTable(
+  "tarefa_responsaveis",
+  {
+    tarefaId: uuid("tarefa_id").notNull().references(() => tarefas.id, { onDelete: "cascade" }),
+    pessoaId: uuid("pessoa_id").notNull().references(() => pessoas.id, { onDelete: "cascade" }),
+  },
+  (t) => [primaryKey({ columns: [t.tarefaId, t.pessoaId] }), index("tarefa_responsaveis_pessoa_idx").on(t.pessoaId)],
+);
+
+export const tarefaChecklistItens = pgTable(
+  "tarefa_checklist_itens",
+  {
+    ...tenant(),
+    tarefaId: uuid("tarefa_id").notNull().references(() => tarefas.id, { onDelete: "cascade" }),
+    conteudo: text("conteudo").notNull(),
+    concluido: boolean("concluido").notNull().default(false),
+    ordem: integer("ordem").notNull().default(0),
+  },
+  (t) => [index("tarefa_checklist_tarefa_idx").on(t.tarefaId, t.ordem)],
+);
+
+// Autoria em createdBy (id do usuário, como nas demais tabelas).
+export const tarefaComentarios = pgTable(
+  "tarefa_comentarios",
+  {
+    ...tenant(),
+    tarefaId: uuid("tarefa_id").notNull().references(() => tarefas.id, { onDelete: "cascade" }),
+    texto: text("texto").notNull(),
+  },
+  (t) => [index("tarefa_comentarios_tarefa_idx").on(t.tarefaId, t.createdAt)],
+);
+
+export const tarefaAtividades = pgTable(
+  "tarefa_atividades",
+  {
+    ...tenant(),
+    tarefaId: uuid("tarefa_id").notNull().references(() => tarefas.id, { onDelete: "cascade" }),
+    tipo: text("tipo", { enum: TIPOS_ATIVIDADE }).notNull(),
+    dados: jsonb("dados").$type<Record<string, unknown>>(),
+  },
+  (t) => [index("tarefa_atividades_tarefa_idx").on(t.tarefaId, t.createdAt)],
 );
 
 export const espacos = pgTable("espacos", {

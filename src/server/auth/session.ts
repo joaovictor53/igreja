@@ -5,8 +5,11 @@ import { asc, eq, sql } from "drizzle-orm";
 import { auth } from "@/server/auth";
 import { db } from "@/db";
 import { membrosParoquia, paroquias } from "@/db/schema";
+import type { Permissao } from "@/lib/permissoes";
+import { contextoDoPapel } from "@/server/permissoes";
 
-export type Papel = (typeof membrosParoquia.$inferSelect)["papel"];
+/** Chave do papel do membro: de sistema ("paroco"...) ou criado pela paróquia. */
+export type Papel = string;
 
 export async function getSession() {
   return auth.api.getSession({ headers: await headers() });
@@ -23,7 +26,7 @@ export async function requireUser() {
  * Contexto de tenant: a paróquia vem do vínculo do usuário no servidor,
  * nunca do cliente. Sem vínculo, vai para o onboarding.
  */
-export async function requireParoquia(papeisPermitidos?: Papel[]) {
+export async function requireParoquia(permissao?: Permissao) {
   const user = await requireUser();
   const [row] = await db
     .select({ paroquia: paroquias, papel: membrosParoquia.papel, pessoaId: membrosParoquia.pessoaId })
@@ -34,6 +37,8 @@ export async function requireParoquia(papeisPermitidos?: Papel[]) {
     .orderBy(sql`(${membrosParoquia.papel} = 'membro')`, asc(membrosParoquia.createdAt))
     .limit(1);
   if (!row) redirect("/painel/nova-paroquia");
-  if (papeisPermitidos && !papeisPermitidos.includes(row.papel)) redirect("/painel");
-  return { user, paroquia: row.paroquia, papel: row.papel, pessoaId: row.pessoaId };
+  const { nome: papelNome, permissoes } = await contextoDoPapel(row.paroquia.id, row.papel);
+  if (permissao && !permissoes.has(permissao)) redirect("/painel");
+  const pode = (p: Permissao) => permissoes.has(p);
+  return { user, paroquia: row.paroquia, papel: row.papel, papelNome, permissoes, pode, pessoaId: row.pessoaId };
 }

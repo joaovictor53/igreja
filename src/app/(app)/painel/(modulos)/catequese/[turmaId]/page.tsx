@@ -24,8 +24,8 @@ const STATUS = ["ativa", "concluida", "desistente"] as const;
 async function Conteudo({ params }: { params: Promise<{ turmaId: string }> }) {
   const { turmaId } = await params;
   if (!z.uuid().safeParse(turmaId).success) notFound();
-  const { paroquia, papel } = await requireParoquia(["admin", "paroco", "secretaria", "catequista"]);
-  const pode = papel !== "catequista";
+  const { paroquia, pode: podeFazer } = await requireParoquia("catequese:ver");
+  const pode = podeFazer("catequese:gerir");
   const [turma] = await db
     .select()
     .from(turmasCatequese)

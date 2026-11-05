@@ -8,7 +8,7 @@ import { comunidades, etapasCatequese, matriculasCatequese, pessoas, turmaCatequ
 import { requireParoquia } from "@/server/auth/session";
 import { exigirDaParoquia } from "@/server/tenant";
 
-const guard = () => requireParoquia(["admin", "paroco", "secretaria"]);
+const guard = () => requireParoquia("catequese:gerir");
 const refresh = () => revalidatePath("/painel/catequese", "layout");
 
 export async function criarEtapa(formData: FormData) {

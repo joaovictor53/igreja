@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("reservas:gerir");
   const [salas, lista] = await Promise.all([
     db.select().from(espacos).where(eq(espacos.paroquiaId, paroquia.id)).orderBy(asc(espacos.nome)),
     db.select().from(reservas).where(eq(reservas.paroquiaId, paroquia.id)).orderBy(asc(reservas.inicio)),

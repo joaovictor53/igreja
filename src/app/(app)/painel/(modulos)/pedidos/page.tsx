@@ -10,16 +10,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { papeisComPermissao } from "@/server/permissoes";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("pedidos:gerir");
   const [lista, responsaveis] = await Promise.all([
     db.select().from(pedidosPastorais).where(eq(pedidosPastorais.paroquiaId, paroquia.id)).orderBy(desc(pedidosPastorais.createdAt)).limit(200),
     db
       .select({ id: usuarios.id, nome: usuarios.name })
       .from(membrosParoquia)
       .innerJoin(usuarios, eq(usuarios.id, membrosParoquia.usuarioId))
-      .where(and(eq(membrosParoquia.paroquiaId, paroquia.id), inArray(membrosParoquia.papel, ["admin", "paroco"]))),
+      .where(and(eq(membrosParoquia.paroquiaId, paroquia.id), inArray(membrosParoquia.papel, await papeisComPermissao(paroquia.id, "pedidos:receber")))),
   ]);
   const abertos = (p: (typeof lista)[number]) => p.status === "novo" || p.status === "em_andamento";
   // urgentes em aberto primeiro, depois por data

@@ -5,8 +5,8 @@ import { formularios, membrosParoquia, respostas } from "@/db/schema";
 import { auditar } from "@/server/audit";
 import { getSession } from "@/server/auth/session";
 import { celulaCsv } from "@/lib/formularios";
+import { contextoDoPapel } from "@/server/permissoes";
 
-const PAPEIS = ["admin", "paroco", "secretaria"];
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/inscricoes/[formId]/csv">) {
   const { formId } = await ctx.params;
@@ -23,7 +23,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/inscricoes/[for
       and(eq(membrosParoquia.paroquiaId, formularios.paroquiaId), eq(membrosParoquia.usuarioId, session.user.id)),
     )
     .where(eq(formularios.id, formId));
-  if (!row || !PAPEIS.includes(row.papel)) return new Response("Não encontrado", { status: 404 });
+  if (!row || !(await contextoDoPapel(row.f.paroquiaId, row.papel)).permissoes.has("inscricoes:gerir")) return new Response("Não encontrado", { status: 404 });
 
   const lista = await db.select().from(respostas).where(eq(respostas.formularioId, row.f.id)).orderBy(asc(respostas.createdAt));
   const cab = ["recebida_em", "status", ...row.f.campos.map((c) => c.rotulo)];

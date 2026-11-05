@@ -9,7 +9,7 @@ import { requireParoquia } from "@/server/auth/session";
 
 export type ComunidadeState = { erro?: string; ok?: boolean };
 
-const guard = () => requireParoquia(["admin", "paroco", "secretaria"]);
+const guard = () => requireParoquia("comunidades:gerir");
 const refresh = () => revalidatePath("/painel/comunidades");
 
 const schema = z.object({

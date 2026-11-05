@@ -23,7 +23,7 @@ const TIPO = { batizado: "Batizado", casamento: "Casamento" } as const;
 const STATUS = ["solicitado", "confirmado", "realizado", "cancelado"] as const;
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("sacramentos:gerir");
   const [datas, agendados, comunidadesLista] = await Promise.all([
     db.select().from(datasSacramento).where(eq(datasSacramento.paroquiaId, paroquia.id)).orderBy(asc(datasSacramento.inicio)),
     db.select().from(agendamentosSacramento).where(eq(agendamentosSacramento.paroquiaId, paroquia.id)).orderBy(asc(agendamentosSacramento.createdAt)),

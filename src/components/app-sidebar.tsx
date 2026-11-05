@@ -17,6 +17,7 @@ import {
   ClipboardCheckIcon,
   HandHeartIcon,
   ClipboardListIcon,
+  KeyRoundIcon,
   ShieldCheckIcon,
   HomeIcon,
   LogOutIcon,
@@ -25,6 +26,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import type { Permissao } from "@/lib/permissoes";
 import {
   Sidebar,
   SidebarContent,
@@ -38,12 +40,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-type Papel = "admin" | "paroco" | "secretaria" | "coordenador" | "catequista" | "membro";
-type Item = { href: string; label: string; icon: LucideIcon; papeis?: Papel[] };
+type Item = { href: string; label: string; icon: LucideIcon; permissao?: Permissao };
 type Modulo = { titulo: string; itens: Item[] };
-
-const SECRETARIA: Papel[] = ["admin", "paroco", "secretaria"];
-const GESTAO: Papel[] = ["admin", "paroco"];
 
 const MODULOS: Modulo[] = [
   {
@@ -57,54 +55,57 @@ const MODULOS: Modulo[] = [
   {
     titulo: "Liturgia",
     itens: [
-      { href: "/painel/liturgia/horarios", label: "Horários", icon: ChurchIcon, papeis: SECRETARIA },
-      { href: "/painel/liturgia/celebracoes", label: "Celebrações e intenções", icon: ClipboardListIcon, papeis: SECRETARIA },
+      { href: "/painel/liturgia/horarios", label: "Horários", icon: ChurchIcon, permissao: "liturgia:gerir" },
+      { href: "/painel/liturgia/celebracoes", label: "Celebrações e intenções", icon: ClipboardListIcon, permissao: "liturgia:gerir" },
     ],
   },
-  { titulo: "Agenda", itens: [{ href: "/painel/agenda", label: "Agenda pública", icon: CalendarDaysIcon, papeis: SECRETARIA }] },
+  { titulo: "Agenda", itens: [{ href: "/painel/agenda", label: "Agenda pública", icon: CalendarDaysIcon, permissao: "agenda:gerir" }] },
   {
     titulo: "Escalas",
     itens: [
-      { href: "/painel/escalas", label: "Escala do mês", icon: CalendarDaysIcon, papeis: SECRETARIA },
-      { href: "/painel/escalas/funcoes", label: "Funções", icon: UsersIcon, papeis: SECRETARIA },
+      { href: "/painel/escalas", label: "Escala do mês", icon: CalendarDaysIcon, permissao: "escalas:gerir" },
+      { href: "/painel/escalas/funcoes", label: "Funções", icon: UsersIcon, permissao: "escalas:gerir" },
       { href: "/painel/escalas/minhas", label: "Minhas escalas", icon: UserCheckIcon },
     ],
   },
   {
     titulo: "Pastoral",
     itens: [
-      { href: "/painel/inscricoes", label: "Inscrições", icon: ClipboardCheckIcon, papeis: SECRETARIA },
-      { href: "/painel/pedidos", label: "Pedidos pastorais", icon: HandHeartIcon, papeis: SECRETARIA },
-      { href: "/painel/sacramentos", label: "Batizados e casamentos", icon: DropletsIcon, papeis: SECRETARIA },
-      { href: "/painel/catequese", label: "Catequese", icon: GraduationCapIcon, papeis: [...SECRETARIA, "catequista"] },
+      { href: "/painel/inscricoes", label: "Inscrições", icon: ClipboardCheckIcon, permissao: "inscricoes:gerir" },
+      { href: "/painel/pedidos", label: "Pedidos pastorais", icon: HandHeartIcon, permissao: "pedidos:gerir" },
+      { href: "/painel/sacramentos", label: "Batizados e casamentos", icon: DropletsIcon, permissao: "sacramentos:gerir" },
+      { href: "/painel/catequese", label: "Catequese", icon: GraduationCapIcon, permissao: "catequese:ver" },
     ],
   },
   {
     titulo: "Secretaria",
     itens: [
-      { href: "/painel/tarefas", label: "Tarefas", icon: CheckSquareIcon, papeis: SECRETARIA },
-      { href: "/painel/reservas", label: "Reserva de espaços", icon: BuildingIcon, papeis: SECRETARIA },
-      { href: "/painel/ferramentas", label: "Ferramentas de QR Code", icon: QrCodeIcon, papeis: SECRETARIA },
+      { href: "/painel/tarefas", label: "Tarefas", icon: CheckSquareIcon, permissao: "tarefas:ver" },
+      { href: "/painel/reservas", label: "Reserva de espaços", icon: BuildingIcon, permissao: "reservas:gerir" },
+      { href: "/painel/ferramentas", label: "Ferramentas de QR Code", icon: QrCodeIcon, permissao: "ferramentas:usar" },
     ],
   },
   {
     titulo: "Registros",
-    itens: [{ href: "/painel/registros", label: "Livros e certidões", icon: BookOpenIcon, papeis: SECRETARIA }],
+    itens: [{ href: "/painel/registros", label: "Livros e certidões", icon: BookOpenIcon, permissao: "registros:gerir" }],
   },
   {
     titulo: "Administração",
-    itens: [{ href: "/painel/auditoria", label: "Auditoria", icon: ShieldCheckIcon, papeis: GESTAO }],
+    itens: [
+      { href: "/painel/auditoria", label: "Auditoria", icon: ShieldCheckIcon, permissao: "auditoria:ver" },
+      { href: "/painel/papeis", label: "Papéis e acessos", icon: KeyRoundIcon, permissao: "papeis:gerir" },
+    ],
   },
   {
     titulo: "Cadastros",
     itens: [
-      { href: "/painel/pessoas", label: "Pessoas", icon: UsersIcon, papeis: SECRETARIA },
-      { href: "/painel/comunidades", label: "Comunidades", icon: MapPinIcon, papeis: SECRETARIA },
+      { href: "/painel/pessoas", label: "Pessoas", icon: UsersIcon, permissao: "pessoas:gerir" },
+      { href: "/painel/comunidades", label: "Comunidades", icon: MapPinIcon, permissao: "comunidades:gerir" },
     ],
   },
 ];
 
-export function AppSidebar({ papel, paroquia, usuario }: { papel: Papel; paroquia: string; usuario: string }) {
+export function AppSidebar({ permissoes, paroquia, usuario }: { permissoes: Permissao[]; paroquia: string; usuario: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const ativo = (href: string) => (href === "/painel" ? pathname === href : pathname === href || pathname.startsWith(href + "/"));
@@ -128,7 +129,7 @@ export function AppSidebar({ papel, paroquia, usuario }: { papel: Papel; paroqui
       </SidebarHeader>
       <SidebarContent>
         {MODULOS.map((modulo) => {
-          const itens = modulo.itens.filter((i) => !i.papeis || i.papeis.includes(papel));
+          const itens = modulo.itens.filter((i) => !i.permissao || permissoes.includes(i.permissao));
           if (!itens.length) return null;
           return (
             <SidebarGroup key={modulo.titulo}>

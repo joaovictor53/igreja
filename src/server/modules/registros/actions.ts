@@ -10,8 +10,7 @@ import { auditar } from "@/server/audit";
 import { requireParoquia } from "@/server/auth/session";
 import { gerarCodigo, hashCertidao, nomePrincipal, normalizar, textoCertidao, type DadosCertidao } from "@/lib/registros";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
-const guard = () => requireParoquia([...PAPEIS]);
+const guard = () => requireParoquia("registros:gerir");
 const MAX_LINHAS_PESSOAS = 8;
 
 export type RegistroState = { erro?: string };

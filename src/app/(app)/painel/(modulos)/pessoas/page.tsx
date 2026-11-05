@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, gt, isNull } from "drizzle-orm";
 import { db } from "@/db";
-import { membrosParoquia, pessoas } from "@/db/schema";
+import { convites, membrosParoquia, pessoas } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
+import { papeisDaParoquia } from "@/server/permissoes";
 import { criarPessoa } from "@/server/modules/pessoas/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,18 @@ import { Separator } from "@/components/ui/separator";
 import { ConviteButton } from "./convite-button";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
-  const [lista, vinculos] = await Promise.all([
+  const { paroquia, pode } = await requireParoquia("pessoas:gerir");
+  const [lista, vinculos, pendentes, papeis] = await Promise.all([
     db.select().from(pessoas).where(eq(pessoas.paroquiaId, paroquia.id)).orderBy(asc(pessoas.nome)),
     db.select({ pessoaId: membrosParoquia.pessoaId }).from(membrosParoquia).where(eq(membrosParoquia.paroquiaId, paroquia.id)),
+    db
+      .select({ pessoaId: convites.pessoaId })
+      .from(convites)
+      .where(and(eq(convites.paroquiaId, paroquia.id), isNull(convites.usadoEm), isNull(convites.revogadoEm), gt(convites.expiraEm, new Date()))),
+    // só quem administra papéis escolhe o papel do convite
+    pode("papeis:gerir") ? papeisDaParoquia(paroquia.id) : Promise.resolve(undefined),
   ]);
+  const comConvite = new Set(pendentes.map((v) => v.pessoaId));
   const vinculadas = new Set(vinculos.map((v) => v.pessoaId));
 
   return (
@@ -32,7 +40,7 @@ async function Conteudo() {
               {i > 0 && <Separator />}
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <span>{p.nome}</span>
-                {vinculadas.has(p.id) ? <Badge variant="secondary">Conta vinculada</Badge> : <ConviteButton pessoaId={p.id} />}
+                {vinculadas.has(p.id) ? <Badge variant="secondary">Conta vinculada</Badge> : <ConviteButton pessoaId={p.id} pendente={comConvite.has(p.id)} papeis={papeis} />}
               </div>
             </div>
           ))}

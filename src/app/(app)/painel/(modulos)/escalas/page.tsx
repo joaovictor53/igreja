@@ -14,7 +14,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 const mesAtual = () => new Date().toISOString().slice(0, 7);
 
 async function Conteudo({ searchParams }: { searchParams: Promise<{ mes?: string }> }) {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("escalas:gerir");
   const { mes: mesParam } = await searchParams;
   const mes = /^\d{4}-\d{2}$/.test(mesParam ?? "") ? mesParam! : mesAtual();
 

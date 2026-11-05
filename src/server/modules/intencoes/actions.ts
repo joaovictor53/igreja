@@ -7,7 +7,6 @@ import { db } from "@/db";
 import { celebracoes, intencoes } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
 
 const schema = z.object({
   celebracaoId: z.uuid(),
@@ -20,7 +19,7 @@ const schema = z.object({
 export type IntencaoState = { erro?: string; aviso?: string; ok?: boolean };
 
 export async function criarIntencao(_: IntencaoState, formData: FormData): Promise<IntencaoState> {
-  const { paroquia, user } = await requireParoquia([...PAPEIS]);
+  const { paroquia, user } = await requireParoquia("liturgia:gerir");
   const parsed = schema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { erro: parsed.error.issues[0].message };
   const d = parsed.data;
@@ -41,7 +40,7 @@ export async function criarIntencao(_: IntencaoState, formData: FormData): Promi
 }
 
 export async function excluirIntencao(formData: FormData) {
-  const { paroquia } = await requireParoquia([...PAPEIS]);
+  const { paroquia } = await requireParoquia("liturgia:gerir");
   const id = z.uuid().parse(formData.get("id"));
   const [row] = await db
     .delete(intencoes)

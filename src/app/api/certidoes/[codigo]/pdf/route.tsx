@@ -7,8 +7,8 @@ import { auditar } from "@/server/audit";
 import { getSession } from "@/server/auth/session";
 import { CertidaoPdf } from "@/pdf/certidao";
 import { codigoValido } from "@/lib/registros";
+import { contextoDoPapel } from "@/server/permissoes";
 
-const PAPEIS = ["admin", "paroco", "secretaria"];
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/certidoes/[codigo]/pdf">) {
   const { codigo } = await ctx.params;
@@ -26,7 +26,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/certidoes/[codi
       and(eq(membrosParoquia.paroquiaId, certidoes.paroquiaId), eq(membrosParoquia.usuarioId, session.user.id)),
     )
     .where(eq(certidoes.codigo, codigo));
-  if (!row || !PAPEIS.includes(row.papel)) return new Response("Não encontrada", { status: 404 });
+  if (!row || !(await contextoDoPapel(row.c.paroquiaId, row.papel)).permissoes.has("registros:gerir")) return new Response("Não encontrada", { status: 404 });
 
   await auditar(db, {
     paroquiaId: row.c.paroquiaId,

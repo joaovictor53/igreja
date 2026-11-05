@@ -35,7 +35,7 @@ function paraInput(d: Date | null, tz: string) {
 async function Conteudo({ params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
   if (!z.uuid().safeParse(formId).success) notFound();
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("inscricoes:gerir");
   const [f] = await db
     .select()
     .from(formularios)

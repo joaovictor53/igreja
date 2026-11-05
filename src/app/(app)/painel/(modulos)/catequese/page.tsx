@@ -12,11 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
-const PAPEIS = ["admin", "paroco", "secretaria", "catequista"] as const;
 
 async function Conteudo() {
-  const { paroquia, papel } = await requireParoquia([...PAPEIS]);
-  const pode = papel !== "catequista";
+  const { paroquia, pode: podeFazer } = await requireParoquia("catequese:ver");
+  const pode = podeFazer("catequese:gerir");
   const [etapas, turmas, matriculas, catequistas, comunidadesLista] = await Promise.all([
     db.select().from(etapasCatequese).where(eq(etapasCatequese.paroquiaId, paroquia.id)).orderBy(asc(etapasCatequese.ordem)),
     db.select().from(turmasCatequese).where(eq(turmasCatequese.paroquiaId, paroquia.id)).orderBy(asc(turmasCatequese.nome)),

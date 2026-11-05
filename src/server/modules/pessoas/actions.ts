@@ -8,7 +8,7 @@ import { auditar } from "@/server/audit";
 import { requireParoquia } from "@/server/auth/session";
 
 export async function criarPessoa(formData: FormData) {
-  const { paroquia, user } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia, user } = await requireParoquia("pessoas:gerir");
   const nome = z.string().trim().min(2).parse(formData.get("nome"));
   const nomeBusca = nome.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
   await db.transaction(async (tx) => {

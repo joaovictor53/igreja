@@ -15,7 +15,7 @@ import { PrintButton } from "./print-button";
 async function Conteudo({ params }: { params: Promise<{ celebracaoId: string }> }) {
   const { celebracaoId } = await params;
   if (!z.uuid().safeParse(celebracaoId).success) notFound();
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("liturgia:gerir");
   const [cel] = await db
     .select({ id: celebracoes.id, inicio: celebracoes.inicio, comunidade: comunidades.nome, limite: celebracoes.limiteIntencoes })
     .from(celebracoes)

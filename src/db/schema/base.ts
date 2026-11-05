@@ -58,9 +58,8 @@ export const membrosParoquia = pgTable(
   {
     ...tenant(),
     usuarioId: text("usuario_id").notNull(),
-    papel: text("papel", {
-      enum: ["admin", "paroco", "secretaria", "coordenador", "catequista", "membro"],
-    }).notNull(),
+    // chave de um papel (ver tabela "papeis"): de sistema ou criado pela paróquia
+    papel: text("papel").notNull(),
     pessoaId: uuid("pessoa_id").references(() => pessoas.id),
   },
   (t) => [uniqueIndex("membros_paroquia_uniq").on(t.paroquiaId, t.usuarioId)],

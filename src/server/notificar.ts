@@ -3,6 +3,7 @@ import webpush from "web-push";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
 import { endpointPushPermitido } from "@/lib/push";
+import { papeisComPermissao } from "@/server/permissoes";
 import { funcaoMembros, membrosParoquia, notificacoes, pushSubscriptions } from "@/db/schema";
 
 export type Aviso = { titulo: string; corpo: string; url?: string };
@@ -70,10 +71,11 @@ export async function usuariosDaFuncao(funcaoId: string, exceto: string[] = []) 
 
 /** Quem gerencia as escalas: recebe o aviso de que uma troca foi concluída. */
 export async function gestoresDaParoquia(paroquiaId: string) {
+  const papeisAlvo = await papeisComPermissao(paroquiaId, "alertas:receber");
   const rows = await db
     .select({ usuarioId: membrosParoquia.usuarioId })
     .from(membrosParoquia)
-    .where(and(eq(membrosParoquia.paroquiaId, paroquiaId), inArray(membrosParoquia.papel, ["admin", "paroco", "secretaria"])));
+    .where(and(eq(membrosParoquia.paroquiaId, paroquiaId), inArray(membrosParoquia.papel, papeisAlvo)));
   return rows.map((r) => r.usuarioId);
 }
 

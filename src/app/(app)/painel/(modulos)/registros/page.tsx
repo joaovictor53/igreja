@@ -16,7 +16,7 @@ import { LivroForm } from "./livro-form";
 const escaparLike = (s: string) => s.replace(/[\\%_]/g, "\\$&");
 
 async function Busca({ q, d }: { q: string; d: string }) {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("registros:gerir");
   const termo = normalizar(q);
   // cada palavra precisa aparecer em algum nome do assento, em qualquer ordem
   const palavras = termo.split(/\s+/).filter(Boolean).slice(0, 6);
@@ -64,7 +64,7 @@ async function Busca({ q, d }: { q: string; d: string }) {
 }
 
 async function Livros() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("registros:gerir");
   const lista = await db
     .select({ l: livros, assentos: count(assentos.id) })
     .from(livros)

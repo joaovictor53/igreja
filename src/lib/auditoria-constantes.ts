@@ -9,6 +9,7 @@ export const TABELAS_AUDITADAS = {
   respostas: "Respostas de inscrição",
   convites: "Convites",
   membros_paroquia: "Vínculo de contas",
+  papeis: "Papéis e acessos",
 } as const;
 export type TabelaAuditada = keyof typeof TABELAS_AUDITADAS;
 

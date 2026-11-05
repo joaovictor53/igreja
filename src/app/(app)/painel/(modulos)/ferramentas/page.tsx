@@ -1,6 +1,8 @@
+import { requireParoquia } from "@/server/auth/session";
 import { QrForm } from "./qr-form";
 
-export default function Page() {
+export default async function Page() {
+  await requireParoquia("ferramentas:usar");
   return (
     <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Ferramentas de QR Code</h1>

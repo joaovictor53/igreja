@@ -15,7 +15,7 @@ import { AssentoForm } from "./assento-form";
 async function Conteudo({ params }: { params: Promise<{ livroId: string }> }) {
   const { livroId } = await params;
   if (!z.uuid().safeParse(livroId).success) notFound();
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("registros:gerir");
   const [livro] = await db
     .select()
     .from(livros)

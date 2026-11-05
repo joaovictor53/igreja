@@ -9,7 +9,7 @@ import { requireParoquia } from "@/server/auth/session";
 import { exigirDaParoquia } from "@/server/tenant";
 import { zonedToUtc } from "@/lib/datas";
 
-const guard = () => requireParoquia(["admin", "paroco", "secretaria"]);
+const guard = () => requireParoquia("reservas:gerir");
 const refresh = () => revalidatePath("/painel/reservas");
 
 export async function criarEspaco(formData: FormData) {

@@ -8,7 +8,6 @@ import { agendas, eventos } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 import { zonedToUtc } from "@/lib/datas";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
 
 const schema = z.object({
   titulo: z.string().trim().min(2),
@@ -18,7 +17,7 @@ const schema = z.object({
 });
 
 export async function criarEvento(formData: FormData) {
-  const { paroquia, user } = await requireParoquia([...PAPEIS]);
+  const { paroquia, user } = await requireParoquia("agenda:gerir");
   const d = schema.parse(Object.fromEntries(formData));
   const [agenda] = await db
     .select({ id: agendas.id })
@@ -40,7 +39,7 @@ export async function criarEvento(formData: FormData) {
 }
 
 export async function excluirEvento(formData: FormData) {
-  const { paroquia } = await requireParoquia([...PAPEIS]);
+  const { paroquia } = await requireParoquia("agenda:gerir");
   const id = z.uuid().parse(formData.get("id"));
   await db.delete(eventos).where(and(eq(eventos.id, id), eq(eventos.paroquiaId, paroquia.id)));
   revalidatePath("/painel/agenda");

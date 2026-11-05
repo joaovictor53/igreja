@@ -7,3 +7,4 @@ export * from "./registros";
 export * from "./auditoria";
 export * from "./trocas";
 export * from "./secretaria";
+export * from "./papeis";

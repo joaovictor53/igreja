@@ -19,10 +19,9 @@ import { hojeNoFuso, tarefaAtrasada, versiculoDoDia } from "@/lib/secretaria";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-const PAPEIS_SECRETARIA = ["admin", "paroco", "secretaria"];
 
 async function Resumo() {
-  const { paroquia, papel, user } = await requireParoquia();
+  const { paroquia, papelNome, pode, user } = await requireParoquia();
   const hoje = hojeNoFuso(paroquia.fuso);
   const [y, m, d] = hoje.split("-").map(Number);
   const fuso = paroquia.fuso;
@@ -44,7 +43,7 @@ async function Resumo() {
         </CardTitle>
         <CardDescription className="flex flex-col gap-1">
           <span className="flex items-center gap-2">
-            {paroquia.nome} · {dataLonga} <Badge variant="secondary">{papel}</Badge>
+            {paroquia.nome} · {dataLonga} <Badge variant="secondary">{papelNome}</Badge>
           </span>
           <span className="italic">
             “{texto}” — {ref}
@@ -53,7 +52,7 @@ async function Resumo() {
       </CardHeader>
     </Card>
   );
-  if (!PAPEIS_SECRETARIA.includes(papel)) return cabecalho;
+  if (!pode("pessoas:gerir")) return cabecalho;
 
   const pid = paroquia.id;
   const [[eventosMes], [intencoesMes], [sacramentosMarcados], [inscricoesNovas], celsHoje, eventosHoje, abertas, pedidos] =

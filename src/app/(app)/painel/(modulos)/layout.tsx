@@ -12,15 +12,15 @@ import { buttonVariants } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 async function Shell({ children }: { children: React.ReactNode }) {
-  const { paroquia, papel, user } = await requireParoquia();
+  const { paroquia, permissoes, user } = await requireParoquia();
   const [{ naoLidas }] = await db
     .select({ naoLidas: count() })
     .from(notificacoes)
     .where(and(eq(notificacoes.usuarioId, user.id), isNull(notificacoes.lidaEm)));
   return (
     <SidebarProvider>
-      <AppSidebar papel={papel} paroquia={paroquia.nome} usuario={user.name} />
-      <SidebarInset>
+      <AppSidebar permissoes={[...permissoes]} paroquia={paroquia.nome} usuario={user.name} />
+      <SidebarInset className="min-w-0">
         <header className="flex h-12 items-center gap-2 border-b px-3 print:hidden">
           <SidebarTrigger aria-label="Alternar menu" />
           <div className="ml-auto flex items-center gap-2">

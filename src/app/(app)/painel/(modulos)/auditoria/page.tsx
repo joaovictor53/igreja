@@ -19,7 +19,7 @@ const hora = (d: Date, tz: string) =>
 
 async function Conteudo({ searchParams }: { searchParams: Promise<{ t?: string; p?: string }> }) {
   // somente admin e pároco veem a trilha (ela contém dados pessoais)
-  const { paroquia } = await requireParoquia(["admin", "paroco"]);
+  const { paroquia } = await requireParoquia("auditoria:ver");
   const { t, p } = await searchParams;
   const tabela = t && t in TABELAS_AUDITADAS ? (t as TabelaAuditada) : undefined;
   const pagina = Math.max(1, Number.parseInt(p ?? "1", 10) || 1);

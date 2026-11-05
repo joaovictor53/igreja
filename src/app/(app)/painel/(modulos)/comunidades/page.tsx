@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { LinhaComunidade, NovaComunidade } from "./forms";
 
 async function Conteudo() {
-  const { paroquia } = await requireParoquia(["admin", "paroco", "secretaria"]);
+  const { paroquia } = await requireParoquia("comunidades:gerir");
   const lista = await db.select().from(comunidades).where(eq(comunidades.paroquiaId, paroquia.id)).orderBy(asc(comunidades.nome));
 
   return (

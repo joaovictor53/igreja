@@ -8,7 +8,6 @@ import { celebracoes, comunidades, horariosRecorrentes } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 import { montarRrule, ocorrencias } from "@/lib/datas";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
 const MESES_A_FRENTE = 3;
 
 const horarioSchema = z.object({
@@ -19,7 +18,7 @@ const horarioSchema = z.object({
 });
 
 export async function criarHorario(formData: FormData) {
-  const { paroquia, user } = await requireParoquia([...PAPEIS]);
+  const { paroquia, user } = await requireParoquia("liturgia:gerir");
   const d = horarioSchema.parse(Object.fromEntries(formData));
   const [comunidade] = await db
     .select({ id: comunidades.id })
@@ -43,7 +42,7 @@ export async function criarHorario(formData: FormData) {
 }
 
 export async function gerarCelebracoes() {
-  const { paroquia } = await requireParoquia([...PAPEIS]);
+  const { paroquia } = await requireParoquia("liturgia:gerir");
   const horarios = await db.select().from(horariosRecorrentes).where(eq(horariosRecorrentes.paroquiaId, paroquia.id));
   for (const h of horarios) await gerar(paroquia.id, paroquia.fuso, h);
   revalidatePath("/painel/liturgia/celebracoes");
@@ -59,7 +58,7 @@ async function gerar(paroquiaId: string, fuso: string, h: typeof horariosRecorre
 }
 
 export async function cancelarCelebracao(formData: FormData) {
-  const { paroquia } = await requireParoquia([...PAPEIS]);
+  const { paroquia } = await requireParoquia("liturgia:gerir");
   const id = z.uuid().parse(formData.get("id"));
   await db
     .update(celebracoes)

@@ -16,8 +16,7 @@ import { requireParoquia } from "@/server/auth/session";
 import { gerarEscala } from "@/lib/escala";
 import { zonedToUtc } from "@/lib/datas";
 
-const PAPEIS = ["admin", "paroco", "secretaria"] as const;
-const guard = () => requireParoquia([...PAPEIS]);
+const guard = () => requireParoquia("escalas:gerir");
 const refresh = () => revalidatePath("/painel/escalas", "layout");
 
 export async function criarFuncao(formData: FormData) {
