@@ -21,7 +21,17 @@ async function Conteudo() {
           {lista.map((c, i) => (
             <div key={c.id} className="flex flex-col gap-3">
               {i > 0 && <Separator />}
-              <LinhaComunidade id={c.id} nome={c.nome} endereco={c.endereco} />
+              <LinhaComunidade
+                id={c.id}
+                nome={c.nome}
+                endereco={c.endereco}
+                telefone={c.telefone}
+                descricao={c.descricao}
+                whatsapp={c.whatsapp}
+                mapaUrl={c.mapaUrl}
+                fotoEm={c.fotoEm?.toISOString() ?? null}
+                caminhoPublico={`/${paroquia.slug}/comunidade/${c.slug}`}
+              />
             </div>
           ))}
           {!lista.length && <p>Nenhuma comunidade cadastrada.</p>}
@@ -36,7 +46,7 @@ export default function Page() {
     <main className="mx-auto w-full max-w-3xl p-4 sm:p-6">
       <h1 className="text-2xl font-semibold">Comunidades</h1>
       <p className="text-sm text-muted-foreground">
-        Matriz, capelas e áreas missionárias. Horários de missa, catequese e datas de batizados e casamentos são ligados a uma comunidade.
+        Matriz, capelas e áreas missionárias. Horários de missa, catequese e datas de batizados e casamentos são ligados a uma comunidade, que também ganha uma página pública com missas, festas e atividades.
       </p>
       <Suspense fallback={<p>Carregando…</p>}>
         <Conteudo />

@@ -1,4 +1,6 @@
-import { pgTable, uuid, text, timestamp, jsonb, boolean, date, integer, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, customType, uuid, text, timestamp, jsonb, boolean, date, integer, index, uniqueIndex } from "drizzle-orm/pg-core";
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
 
 const audit = {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -23,11 +25,31 @@ export const tenant = () => ({
   paroquiaId: uuid("paroquia_id").notNull().references(() => paroquias.id, { onDelete: "cascade" }),
 });
 
-export const comunidades = pgTable("comunidades", {
-  ...tenant(),
-  nome: text("nome").notNull(),
-  endereco: text("endereco"),
-  responsavelPessoaId: uuid("responsavel_pessoa_id"),
+export const comunidades = pgTable(
+  "comunidades",
+  {
+    ...tenant(),
+    nome: text("nome").notNull(),
+    // endereço da página pública: /{paróquia}/comunidade/{slug}
+    slug: text("slug").notNull(),
+    descricao: text("descricao"),
+    telefone: text("telefone"),
+    // só dígitos com DDI (ex.: 5592999990000)
+    whatsapp: text("whatsapp"),
+    // link do Google Maps (ou similar) para a página pública
+    mapaUrl: text("mapa_url"),
+    // quando a foto foi enviada; vazio = sem foto. Serve para invalidar o cache.
+    fotoEm: timestamp("foto_em", { withTimezone: true }),
+    endereco: text("endereco"),
+    responsavelPessoaId: uuid("responsavel_pessoa_id"),
+  },
+  (t) => [uniqueIndex("comunidades_paroquia_slug_uniq").on(t.paroquiaId, t.slug)],
+);
+
+export const comunidadeFotos = pgTable("comunidade_fotos", {
+  comunidadeId: uuid("comunidade_id").primaryKey().references(() => comunidades.id, { onDelete: "cascade" }),
+  tipo: text("tipo").notNull(),
+  dados: bytea("dados").notNull(),
 });
 
 export const familias = pgTable("familias", {
@@ -127,4 +149,6 @@ export const eventos = pgTable("eventos", {
   fim: timestamp("fim", { withTimezone: true }),
   rrule: text("rrule"),
   celebracaoId: uuid("celebracao_id").references(() => celebracoes.id, { onDelete: "cascade" }),
+  // evento de uma comunidade (festa, atividade); vazio = evento da paróquia toda
+  comunidadeId: uuid("comunidade_id").references(() => comunidades.id, { onDelete: "set null" }),
 });

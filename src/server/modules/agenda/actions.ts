@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
-import { agendas, eventos } from "@/db/schema";
+import { agendas, comunidades, eventos } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 import { zonedToUtc } from "@/lib/datas";
 
@@ -14,6 +14,7 @@ const schema = z.object({
   local: z.string().trim().optional(),
   data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   hora: z.string().regex(/^\d{2}:\d{2}$/),
+  comunidadeId: z.union([z.uuid(), z.literal("")]).optional(),
 });
 
 export async function criarEvento(formData: FormData) {
@@ -25,6 +26,15 @@ export async function criarEvento(formData: FormData) {
     .where(and(eq(agendas.paroquiaId, paroquia.id), eq(agendas.visibilidade, "publica")))
     .limit(1);
   if (!agenda) throw new Error("Agenda pública não encontrada");
+  let comunidadeId: string | null = null;
+  if (d.comunidadeId) {
+    const [c] = await db
+      .select({ id: comunidades.id })
+      .from(comunidades)
+      .where(and(eq(comunidades.id, d.comunidadeId), eq(comunidades.paroquiaId, paroquia.id)));
+    if (!c) throw new Error("Comunidade não encontrada");
+    comunidadeId = c.id;
+  }
   const [y, m, dia] = d.data.split("-").map(Number);
   const [h, min] = d.hora.split(":").map(Number);
   await db.insert(eventos).values({
@@ -32,10 +42,12 @@ export async function criarEvento(formData: FormData) {
     agendaId: agenda.id,
     titulo: d.titulo,
     local: d.local || null,
+    comunidadeId,
     inicio: zonedToUtc(y, m, dia, h, min, paroquia.fuso),
     createdBy: user.id,
   });
   revalidatePath("/painel/agenda");
+  revalidatePath("/[slug]", "layout");
 }
 
 export async function excluirEvento(formData: FormData) {
@@ -43,4 +55,5 @@ export async function excluirEvento(formData: FormData) {
   const id = z.uuid().parse(formData.get("id"));
   await db.delete(eventos).where(and(eq(eventos.id, id), eq(eventos.paroquiaId, paroquia.id)));
   revalidatePath("/painel/agenda");
+  revalidatePath("/[slug]", "layout");
 }

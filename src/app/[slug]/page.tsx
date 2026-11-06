@@ -43,7 +43,17 @@ async function Conteudo({ params }: { params: Promise<{ slug: string }> }) {
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-semibold">{paroquia.nome}</h1>
-          {comunidades.length > 0 && <p className="mt-1">Comunidades: {comunidades.map((c) => c.nome).join(", ")}</p>}
+          {comunidades.length > 0 && (
+            <p className="mt-1">
+              Comunidades:{" "}
+              {comunidades.map((c, i) => (
+                <span key={c.id}>
+                  {i > 0 && ", "}
+                  <a className="underline" href={`/${paroquia.slug}/comunidade/${c.slug}`}>{c.nome}</a>
+                </span>
+              ))}
+            </p>
+          )}
           <p className="mt-3">
             <a className="underline" href={`/api/ics/${paroquia.slug}`}>Assinar agenda no celular (.ics)</a>
             {" · "}

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { agendas, comunidades, membrosParoquia, paroquias } from "@/db/schema";
 import { requireUser } from "@/server/auth/session";
+import { slugify } from "@/lib/slug";
 import { SLUGS_RESERVADOS } from "./publico";
 
 const schema = z.object({
@@ -29,7 +30,7 @@ export async function criarParoquia(_: NovaParoquiaState, formData: FormData): P
     await db.transaction(async (tx) => {
       const [p] = await tx.insert(paroquias).values({ nome, slug, createdBy: user.id }).returning();
       await tx.insert(membrosParoquia).values({ paroquiaId: p.id, usuarioId: user.id, papel: "admin", createdBy: user.id });
-      await tx.insert(comunidades).values({ paroquiaId: p.id, nome: comunidade, createdBy: user.id });
+      await tx.insert(comunidades).values({ paroquiaId: p.id, nome: comunidade, slug: slugify(comunidade) || "matriz", createdBy: user.id });
       await tx.insert(agendas).values({ paroquiaId: p.id, nome: "Pública", visibilidade: "publica", createdBy: user.id });
     });
   } catch (e) {

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { eventos } from "@/db/schema";
+import { comunidades, eventos } from "@/db/schema";
 import { requireParoquia } from "@/server/auth/session";
 import { criarEvento, excluirEvento } from "@/server/modules/agenda/actions";
 import { formatarDataHora } from "@/lib/datas";
@@ -9,16 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Separator } from "@/components/ui/separator";
 
 async function Conteudo() {
   const { paroquia } = await requireParoquia("agenda:gerir");
-  const lista = await db
-    .select()
-    .from(eventos)
-    .where(eq(eventos.paroquiaId, paroquia.id))
-    .orderBy(asc(eventos.inicio))
-    .limit(100);
+  const [lista, coms] = await Promise.all([
+    db
+      .select({ id: eventos.id, titulo: eventos.titulo, local: eventos.local, inicio: eventos.inicio, comunidade: comunidades.nome })
+      .from(eventos)
+      .leftJoin(comunidades, eq(comunidades.id, eventos.comunidadeId))
+      .where(eq(eventos.paroquiaId, paroquia.id))
+      .orderBy(asc(eventos.inicio))
+      .limit(100),
+    db.select({ id: comunidades.id, nome: comunidades.nome }).from(comunidades).where(eq(comunidades.paroquiaId, paroquia.id)).orderBy(asc(comunidades.nome)),
+  ]);
 
   return (
     <>
@@ -39,9 +44,16 @@ async function Conteudo() {
           Hora
           <Input name="hora" type="time" required />
         </Label>
-        <Label className="col-span-2 flex-col items-stretch sm:col-span-4">
+        <Label className="col-span-2 flex-col items-stretch">
           Local
           <Input name="local" />
+        </Label>
+        <Label className="col-span-2 flex-col items-stretch">
+          Comunidade
+          <NativeSelect name="comunidadeId" defaultValue="" className="w-full">
+            <NativeSelectOption value="">Paróquia toda</NativeSelectOption>
+            {coms.map((c) => <NativeSelectOption key={c.id} value={c.id}>{c.nome}</NativeSelectOption>)}
+          </NativeSelect>
         </Label>
         <Button type="submit" className="self-end">Adicionar</Button>
       </form>
@@ -54,6 +66,7 @@ async function Conteudo() {
                 <span>
                   {formatarDataHora(e.inicio, paroquia.fuso)} — {e.titulo}
                   {e.local && ` (${e.local})`}
+                  {e.comunidade && <span className="text-muted-foreground"> · {e.comunidade}</span>}
                 </span>
                 <form action={excluirEvento}>
                   <input type="hidden" name="id" value={e.id} />
